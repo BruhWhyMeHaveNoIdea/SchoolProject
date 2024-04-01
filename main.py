@@ -4,7 +4,6 @@ from aiogram.dispatcher import FSMContext
 from text_file import help_commands, hello_message
 from parser import dictionary, urls, authors
 from pprint import pprint
-from functools import lru_cache
 from aiogram.dispatcher.filters.state import State, StatesGroup
 import logging
 
@@ -39,11 +38,8 @@ for k in range(1, 7):
     urlkb1.add(button, button2, button3, button4, button5)
 
 
-class answers(StatesGroup):
-    waiting_for_favour = State()
 
 
-@lru_cache(maxsize=None)
 @dp.message_handler(commands=['start'])
 async def start_handler(message: types.Message):
     await message.answer(hello_message,
@@ -51,7 +47,6 @@ async def start_handler(message: types.Message):
                          parse_mode='HTML')
 
 
-@lru_cache(maxsize=None)
 @dp.message_handler(commands=['help'])
 async def help_handler(message: types.Message):
     await message.answer(help_commands,
@@ -59,14 +54,14 @@ async def help_handler(message: types.Message):
                          parse_mode="HTML")
 
 
-@lru_cache(maxsize=None)
+
 @dp.message_handler(commands=['favour'], state=FSMContext)
 async def favour(message: types.Message):
     await message.answer('Хорошо. Следующим сообщением назовите вашего любимого автора.')
     await State.set_state(answers.waiting_for_favour)
 
 
-@lru_cache(maxsize=None)
+
 @dp.message_handler(commands=['newbooks'])
 async def books(message: types.Message):
     await message.answer('Любите почитать? Это хорошо. Вот новые книги, которые появились за сегодня.',
